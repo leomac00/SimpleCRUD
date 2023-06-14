@@ -16,9 +16,15 @@ public class Person {
     @Id
     private long id;
     private String name;
-
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "person_id")
+    private List<Contact> contacts = new ArrayList<>();
 
     public Person(String name, List<Contact> contacts) {
         this.name = name;
+        this.contacts = contacts;
     }
 }

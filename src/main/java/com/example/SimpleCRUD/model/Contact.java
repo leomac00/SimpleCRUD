@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity //Maps the "Contact" entity to the "Contact" table
 @Data
@@ -19,7 +19,6 @@ public class Contact {
     private String name;
     private String email;
     private String phone;
-    private long person_id;
 
     public Contact(String name, String email, String phone) {
         this.setName(name);

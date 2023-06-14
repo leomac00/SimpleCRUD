@@ -9,5 +9,8 @@ import java.util.List;
 
 @Repository
 public interface ContactRepository extends JpaRepository<Contact, Long> {
+
+    @Query("Select c.* from contact c")
+    List getAll();
 }
 
