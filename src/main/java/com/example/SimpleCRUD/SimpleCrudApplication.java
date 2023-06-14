@@ -27,6 +27,7 @@ public class SimpleCrudApplication {
 		ContactRepository contactRepository = cac.getBean(ContactRepository.class);
 		PersonRepository personRepository = cac.getBean(PersonRepository.class);
 		personRepository.deleteAll();
+		contactRepository.deleteAll();
 
 		Person p2 = new Person("Batman");
 		Person p1 = new Person("Mano Brown");

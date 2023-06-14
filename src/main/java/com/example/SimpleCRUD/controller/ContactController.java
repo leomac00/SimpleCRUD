@@ -65,6 +65,7 @@ public class ContactController {
     public ResponseEntity<?> delete(@PathVariable long id){
         return contactRepository.findById(id)
                 .map(c -> {
+                    c.setPerson(null);
                     contactRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.badRequest().build());
