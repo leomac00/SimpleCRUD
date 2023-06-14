@@ -6,14 +6,19 @@ import com.example.SimpleCRUD.repository.ContactRepository;
 import com.example.SimpleCRUD.repository.PersonRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.Arrays;
 import java.util.List;
 
 
 @SpringBootApplication
+@EntityScan
+@EnableJpaRepositories
 public class SimpleCrudApplication {
 
 	public static void main(String[] args) {
@@ -23,17 +28,15 @@ public class SimpleCrudApplication {
 		PersonRepository personRepository = cac.getBean(PersonRepository.class);
 		personRepository.deleteAll();
 
-		Contact c1 = new Contact("name1", "email1", "123-456-1");
-		Contact c2 = new Contact("name2", "email2", "123-456-2");
-		List<Contact> contacts1 = Arrays.asList(c1,c2);
-		Person p1 = new Person("Mano Brown", contacts1);
-		personRepository.save(p1);
+		Person p2 = new Person("Batman");
+		Person p1 = new Person("Mano Brown");
 
-		Contact c3 = new Contact("name3", "email3", "123-456-3");
-		Contact c4 = new Contact("name4", "email4", "123-456-4");
-		List<Contact> contacts2 = Arrays.asList(c3,c4);
-		Person p2 = new Person("Batman", contacts2);
-		personRepository.save(p2);
+		Contact c1 = new Contact("name1", "email1", "123-456-1", p1);
+		Contact c2 = new Contact("name2", "email2", "123-456-2", p2);
+		contactRepository.save(c1);
+		contactRepository.save(c2);
+
+
 	}
 
 //	@Bean
