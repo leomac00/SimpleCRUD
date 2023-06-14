@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
+
 @NoArgsConstructor
 @Entity //Maps the "Contact" entity to the "Contact" table
 @Data
+@Table(name="contact")
 public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -18,4 +22,16 @@ public class Contact {
     private String name;
     private String email;
     private String phone;
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(name = "person_id")
+    private Person person;
+
+    public Contact(String name, String email, String phone, Person person) {
+        this.setName(name);
+        this.setEmail(email);
+        this.setPhone(phone);
+        this.setPerson(person);
+    }
 }

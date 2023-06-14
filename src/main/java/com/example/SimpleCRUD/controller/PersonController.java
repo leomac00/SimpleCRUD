@@ -1,7 +1,7 @@
 package com.example.SimpleCRUD.controller;
 
-import com.example.SimpleCRUD.model.Contact;
-import com.example.SimpleCRUD.repository.ContactRepository;
+import com.example.SimpleCRUD.model.Person;
+import com.example.SimpleCRUD.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +11,10 @@ import java.util.List;
 
 @RestController
 @Log4j2
-@RequestMapping("/contacts")
+@RequestMapping("/people")
 @AllArgsConstructor
-public class ContactController {
-    private ContactRepository repository;
+public class PersonController {
+    private PersonRepository repository;
 
     @GetMapping
     public List findAll(){
@@ -23,29 +23,26 @@ public class ContactController {
 
 
     @GetMapping(path= {"/{id}"})
-    public ResponseEntity<Contact> findById(@PathVariable long id){
+    public ResponseEntity<Person> findById(@PathVariable long id){
         return repository.findById(id)
-                .map(c -> ResponseEntity.ok().body(c))
+                .map(p -> ResponseEntity.ok().body(p))
                 .orElse(ResponseEntity.notFound().build());
     }
 
 
     @PostMapping
-    public Contact create(@RequestBody Contact newContact){
-
-        return repository.save(newContact);
+    public Person create(@RequestBody Person newPerson){
+        return repository.save(newPerson);
     }
 
 
     @PutMapping(value="/{id}")
     public ResponseEntity update(@PathVariable("id") long id,
-                                 @RequestBody Contact contact){
+                                 @RequestBody Person contact){
         return repository.findById(id)
-                .map(c -> {
-                    c.setName(contact.getName());
-                    c.setEmail(contact.getEmail());
-                    c.setPhone(contact.getPhone());
-                    Contact updated = repository.save(c);
+                .map(p -> {
+                    p.setName(contact.getName());
+                    Person updated = repository.save(p);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.badRequest().build());
     }
@@ -54,7 +51,7 @@ public class ContactController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
         return repository.findById(id)
-                .map(c -> {
+                .map(p -> {
                     repository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.badRequest().build());
