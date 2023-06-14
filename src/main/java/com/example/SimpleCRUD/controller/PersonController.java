@@ -1,6 +1,8 @@
 package com.example.SimpleCRUD.controller;
 
+import com.example.SimpleCRUD.model.Contact;
 import com.example.SimpleCRUD.model.Person;
+import com.example.SimpleCRUD.repository.ContactRepository;
 import com.example.SimpleCRUD.repository.PersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,17 +16,18 @@ import java.util.List;
 @RequestMapping("/people")
 @AllArgsConstructor
 public class PersonController {
-    private PersonRepository repository;
+    private PersonRepository personRepository;
+    private ContactRepository contactRepository;
 
     @GetMapping
     public List findAll(){
-        return repository.findAll();
+        return personRepository.findAll();
     }
 
 
     @GetMapping(path= {"/{id}"})
     public ResponseEntity<Person> findById(@PathVariable long id){
-        return repository.findById(id)
+        return personRepository.findById(id)
                 .map(p -> ResponseEntity.ok().body(p))
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -32,17 +35,17 @@ public class PersonController {
 
     @PostMapping
     public Person create(@RequestBody Person newPerson){
-        return repository.save(newPerson);
+        return personRepository.save(newPerson);
     }
 
 
     @PutMapping(value="/{id}")
     public ResponseEntity update(@PathVariable("id") long id,
                                  @RequestBody Person contact){
-        return repository.findById(id)
+        return personRepository.findById(id)
                 .map(p -> {
                     p.setName(contact.getName());
-                    Person updated = repository.save(p);
+                    Person updated = personRepository.save(p);
                     return ResponseEntity.ok().body(updated);
                 }).orElse(ResponseEntity.badRequest().build());
     }
@@ -50,9 +53,15 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable long id){
-        return repository.findById(id)
+
+        return personRepository.findById(id)
                 .map(p -> {
-                    repository.deleteById(id);
+                    contactRepository.findAll().stream()
+                            .filter(contact -> contact.getPerson().equals(p))
+                                    .forEach(contact ->{
+                                        contactRepository.delete(contact);
+                                    });
+                    personRepository.deleteById(id);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.badRequest().build());
     }
