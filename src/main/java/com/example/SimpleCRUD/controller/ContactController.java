@@ -18,7 +18,7 @@ public class ContactController {
 
     @GetMapping
     public List findAll(){
-        return repository.getAll(); // How do I make it return all entries with the foreign key(person_id)?
+        return repository.findAll(); // How do I make it return all entries with the foreign key(person_id)?
     }
 
 

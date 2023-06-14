@@ -19,6 +19,7 @@ public class Contact {
     private String name;
     private String email;
     private String phone;
+    private long person_id;
 
     public Contact(String name, String email, String phone) {
         this.setName(name);
